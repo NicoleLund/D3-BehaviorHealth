@@ -69,11 +69,11 @@ d3.csv("data/data.csv").then(function(acsData) {
     // Create scale functions
     // ==============================
     var xPovertyScale = d3.scaleLinear()
-        .domain(d3.extent(acsData, d => d.poverty))
+        .domain([d3.min(acsData, d => d.poverty)-1,d3.max(acsData, d => d.poverty)+1])
         .range([0, width]);
         
     var yHealthcareScale = d3.scaleLinear()
-        .domain(d3.extent(acsData, d => d.healthcare))
+        .domain([d3.min(acsData, d => d.healthcare)-1,d3.max(acsData, d => d.healthcare)+1])
         .range([height, 0]);
 
     // Create axis functions
@@ -105,17 +105,16 @@ d3.csv("data/data.csv").then(function(acsData) {
     // ==============================
     console.log(acsData);
     var labelsGroup = chartGroup.selectAll("text")
-    .data(acsData)
-    // .enter().append("text")     // This only displays the text and line 116 console.log for acsData objects >= 22 (Michigan). 
-    .join("text")               // This only displays the text for acsData objects >= 22 (Michigan). Line 116 console.log shows all objects.
-    .attr("class","stateText")
-    .attr("x", d => xPovertyScale(d.poverty))
-    .attr("y", d => yHealthcareScale(d.healthcare))
-    .attr("dy", 5)
-    .text(function(d) {
-        console.log(d.abbr);
-        return d.abbr;
-    });
+        .data(acsData)
+        .enter().append("text")  
+        .merge(circlesGroup)
+        .attr("class","stateText")
+        .attr("dx", d => xPovertyScale(d.poverty))
+        .attr("dy", d => yHealthcareScale(d.healthcare) + 5)
+        .text(function(d) {
+            console.log(d.abbr);
+            return d.abbr;
+        });
 
     // Add Tool Tip Feature
     // ==============================
@@ -148,7 +147,7 @@ d3.csv("data/data.csv").then(function(acsData) {
     // ==============================
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 10)
+      .attr("y", 0 - margin.left + 50)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "aText")
