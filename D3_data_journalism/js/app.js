@@ -1,5 +1,6 @@
 // Define SVG Area with help from
 // https://www.d3-graph-gallery.com/graph/custom_responsive.html
+// ==============================
 var svgWidth = parseInt(d3.select("#scatter").style('width'),10);
 console.log("svgWidth: " + svgWidth);
 var svgHeight = 0.75*parseInt(d3.select("#scatter").style('width'),10);
@@ -12,24 +13,27 @@ var margin = {
 };
 
 // Define Chart Area
+// ==============================
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper
+// Create an SVG wrapper and group
+// ==============================
 var svg = d3.select("#scatter")
   .classed("chart", true)
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
-// Append an SVG group for the chart then shift the latter by the left and top margins.
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Import Data with headers:
 // id,state,abbr,poverty,povertyMoe,age,ageMoe,income,incomeMoe,healthcare,healthcareLow,
 // healthcareHigh,obesity,obesityLow,obesityHigh,smokes,smokesLow,smokesHigh
+// ==============================
 d3.csv("data/data.csv").then(function(acsData) {
+    // console.log(acsData);
 
     // Cast data as numbers 
     // ==============================
@@ -97,6 +101,22 @@ d3.csv("data/data.csv").then(function(acsData) {
       .attr("cy", d => yHealthcareScale(d.healthcare))
       .attr("r", "15");
 
+    // Create Circle Labels
+    // ==============================
+    console.log(acsData);
+    var labelsGroup = chartGroup.selectAll("text")
+    .data(acsData)
+    // .enter().append("text")     // This only displays the text and line 116 console.log for acsData objects >= 22 (Michigan). 
+    .join("text")               // This only displays the text for acsData objects >= 22 (Michigan). Line 116 console.log shows all objects.
+    .attr("class","stateText")
+    .attr("x", d => xPovertyScale(d.poverty))
+    .attr("y", d => yHealthcareScale(d.healthcare))
+    .attr("dy", 5)
+    .text(function(d) {
+        console.log(d.abbr);
+        return d.abbr;
+    });
+
     // Add Tool Tip Feature
     // ==============================
     var toolTip = d3.tip()
@@ -109,6 +129,14 @@ d3.csv("data/data.csv").then(function(acsData) {
     chartGroup.call(toolTip);
 
     circlesGroup
+      .on("mouseover", function(d) {
+        toolTip.show(d, this);
+      })
+      .on("mouseout", function(d) {
+        toolTip.hide(d);
+      });
+
+    labelsGroup
       .on("mouseover", function(d) {
         toolTip.show(d, this);
       })
