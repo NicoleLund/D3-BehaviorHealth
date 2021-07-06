@@ -15,10 +15,16 @@
     <div class="row">
       <div class="col-xs-12 col-md-12">
         <h1>D3Times</h1>
+        <h3><i>Investigating the data, so you don't have to.</i></h3>
+        <br>
+        <hr>
+        <br>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-12  col-md-12">
+        <h2 class="text-center">U.S. Census Bureau - Behavioral Risk Factor Surveillance System</h2>
+        <h3 class="text-center"> 2014 ACS 1-year estimates </h3>
         <div id="scatter">
           <!-- We append our chart here. -->
         </div>
@@ -27,10 +33,34 @@
     <div class="row">
       <div class="col-xs-12  col-md-12">
         <div class="article">
-          <h2>Correlations Discovered Between Health Risks and Age, Income</h2>
+          <br>
+          <h2>Correlations Discovered Between Health Risks and State Demographics</h2>
+          <p>The U.S. Census Bureau's Behavioral risk Factor Surveillance System aggregates survey data by state from families throughout the nation.  The bureau collects demographic and health related data to assess health risk factors for different areas of the country.  The data presented shows survey results from 2014.</p>
+          <p>In general, states with higher income and less poverty experience better health outcomes. Detailed correlation assessments are as follows:</p>
           <ul>
             <li>
-              <strong>Healthcare and Poverty:</strong>  As the poverty rate increases in a state, the rate of individuals lacking healthcare also increases.
+              <strong>Poverty:</strong>  
+              <ul>
+                <li>Increased poverty rate is positively correlated with the rate of individuals lacking healthcare.</li>
+                <li>Increased poverty rate is positively correlated with the rate of individuals that choose to smoke cigarettes.</li>
+                <li>Increased poverty rate is positively correlated with the rate of obesity.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Age:</strong>  
+              <ul>
+                <li>Higher median ages are negatively correlated with the rate of individuals lacking healthcare.</li>
+                <li>Higher median ages are positively correlated with the rate of individuals that choose to smoke cigarettes.</li>
+                <li>Median age does not appear to be correlated with obesity.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Household Income:</strong>  
+              <ul>
+                <li>Increased income is negatively correlated with the rate of individuals lacking healthcare.</li>
+                <li>Increased income is negatively correlated with the rate of individuals that choose to smoke cigarettes.</li>
+                <li>Increased income is negatively correlated with the rate of obesity.</li>
+              </ul>
             </li>
           </ul>
         </div>
