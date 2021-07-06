@@ -116,7 +116,7 @@ d3.csv("data/data.csv").then(function(acsData) {
             return d.abbr;
         });
 
-    // Add Tool Tip Feature
+    // Add Tool Tip Feature with mouseover actions
     // ==============================
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
@@ -150,12 +150,12 @@ d3.csv("data/data.csv").then(function(acsData) {
       .attr("y", 0 - margin.left + 50)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
-      .attr("class", "aText")
+      .attr("class", "active")
       .text("Lacks Healthcare (%)");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top - 60})`)
-      .attr("class", "aText")
+      .attr("class", "active")
       .text("In Poverty (%)");
 
   }).catch(function(error) {
