@@ -28,6 +28,7 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+
 // Import Data with headers:
 // id,state,abbr,poverty,povertyMoe,age,ageMoe,income,incomeMoe,healthcare,healthcareLow,
 // healthcareHigh,obesity,obesityLow,obesityHigh,smokes,smokesLow,smokesHigh
@@ -64,37 +65,78 @@ d3.csv("data/data.csv").then(function(acsData) {
     data.incomeMoe = +data.incomeMoe;
   });
 
-  // Prepare arrays and variables containing the selected chart data and information
-  var selectedData = [];
-  var xToolTip = '';
-  var yToolTip = '';
-  var povertyLabel = '';
-  var ageLabel = '';
-  var incomeLabel = '';
-  var healthcareLabel = '';
-  var smokesLabel = '';
-  var obeseLabel = '';
 
+  // Identify data of interest
+  // ==============================
+  var xToolTip = 'poverty';
+  // var xToolTip = 'age';
+  // var xToolTip = 'income';
+
+  // var yToolTip = 'healthcare';
+  // var yToolTip = 'obesity';
+  var yToolTip = 'smokes';
+
+
+  // Define selected data array
+  // ==============================
+  var selectedData = [];
   acsData.forEach(function(data) {
     selectedData.push({
-        "x": data.poverty,
-        "y": data.healthcare,
         "abbr": data.abbr,
         "state": data.state
     });
   });
+    
+  acsData.forEach(function(data) {
+    selectedData[selectedData.findIndex(obj => obj.abbr === data.abbr)].x = data[xToolTip];
+  });
 
-  xToolTip = 'Poverty';
-  yToolTip = 'Healthcare';
-  povertyLabel = 'active';
-  ageLabel = 'inactive';
-  incomeLabel = 'inactive';
-  healthcareLabel = 'active';
-  smokesLabel = 'inactive';
-  obeseLabel = 'inactive';
+  acsData.forEach(function(data) {
+    selectedData[selectedData.findIndex(obj => obj.abbr === data.abbr)].y = data[yToolTip];
+  });
+
+
+  // Define axis label font classes
+  // ==============================
+  var povertyLabel = 'inactive';
+  var ageLabel = 'inactive';
+  var incomeLabel = 'inactive';
+  var healthcareLabel = 'inactive';
+  var smokesLabel = 'inactive';
+  var obeseLabel = 'inactive';
+
+  // Define highlighted axis labels
+  switch(xToolTip) {
+    case "poverty":
+      povertyLabel = 'active';
+      var xAddendum = '%';
+      break;
+    case "age":
+      ageLabel = 'active';
+      var xAddendum = ' years old';
+      break;
+    case "income":
+      incomeLabel = 'active';
+      var xAddendum = ' USD';
+      break;
+  };
+
+  switch(yToolTip) {
+    case "healthcare":
+      healthcareLabel = 'active';
+      break;
+    case "smokes":
+      smokesLabel = 'active';
+      break;
+    case "obesity":
+      obeseLabel = 'active';
+      break;
+  };
+
+  // Build plot
+  // ==============================
 
   // Create scale functions
-  // ==============================
   var xScale = d3.scaleLinear()
     .domain([d3.min(selectedData, d => d.x)-1,d3.max(selectedData, d => d.x)+1])
     .range([0, width]);
@@ -104,21 +146,18 @@ d3.csv("data/data.csv").then(function(acsData) {
     .range([height, 0]);
 
   // Create axis functions
-  // ==============================
   var xAxis = d3.axisBottom(xScale);
   var yAxis = d3.axisLeft(yScale);
 
   // Append Axes to the chart
-  // ==============================
   chartGroup.append("g")
-  .attr("transform", `translate(0, ${height})`)
-  .call(xAxis);
+    .attr("transform", `translate(0, ${height})`)
+    .call(xAxis);
 
   chartGroup.append("g")
     .call(yAxis);
 
   // Create Circles
-  // ==============================
   var circlesGroup = chartGroup.selectAll("circle")
     .data(selectedData)
     .enter()
@@ -129,26 +168,24 @@ d3.csv("data/data.csv").then(function(acsData) {
     .attr("r", "15");
 
   // Create Circle Labels
-  // ==============================
   var labelsGroup = chartGroup.selectAll("text")
-      .data(selectedData)
-      .enter().append("text")  
-      .merge(circlesGroup)
-      .attr("class","stateText")
-      .attr("dx", d => xScale(d.x))
-      .attr("dy", d => yScale(d.y) + 5)
-      .text(function(d) {
-          return d.abbr;
-      });
+    .data(selectedData)
+    .enter().append("text")  
+    .merge(circlesGroup)
+    .attr("class","stateText")
+    .attr("dx", d => xScale(d.x))
+    .attr("dy", d => yScale(d.y) + 5)
+    .text(function(d) {
+        return d.abbr;
+    });
 
   // Add Tool Tip Feature with mouseover actions
-  // ==============================
   var toolTip = d3.tip()
-  .attr("class", "d3-tip")
-  .offset([20, -60])
-  .html(function(d) {
-    return (`${d.state}<br>${xToolTip}: ${d.x}%<br>${yToolTip}: ${d.y}%`);
-  });
+    .attr("class", "d3-tip")
+    .offset([20, -60])
+    .html(function(d) {
+      return (`${d.state}<br>${xToolTip}: ${d.x}${xAddendum}<br>${yToolTip}: ${d.y}%`);
+    });
 
   chartGroup.call(toolTip);
 
