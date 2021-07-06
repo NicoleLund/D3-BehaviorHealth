@@ -71,21 +71,41 @@ d3.csv("data/data.csv").then(function(acsData) {
     var xPovertyScale = d3.scaleLinear()
         .domain([d3.min(acsData, d => d.poverty)-1,d3.max(acsData, d => d.poverty)+1])
         .range([0, width]);
-        
+    
+    var xAgeScale = d3.scaleLinear()
+      .domain([d3.min(acsData, d => d.age)-1,d3.max(acsData, d => d.age)+1])
+      .range([0, width]);
+    
+    var xIncomeScale = d3.scaleLinear()
+      .domain([d3.min(acsData, d => d.income)-1,d3.max(acsData, d => d.income)+1])
+      .range([0, width]);
+
     var yHealthcareScale = d3.scaleLinear()
         .domain([d3.min(acsData, d => d.healthcare)-1,d3.max(acsData, d => d.healthcare)+1])
         .range([height, 0]);
 
+    var yObesityScale = d3.scaleLinear()
+      .domain([d3.min(acsData, d => d.obesity)-1,d3.max(acsData, d => d.obesity)+1])
+      .range([height, 0]);
+
+    var ySmokerScale = d3.scaleLinear()
+      .domain([d3.min(acsData, d => d.smokes)-1,d3.max(acsData, d => d.smokes)+1])
+      .range([height, 0]);
+
     // Create axis functions
     // ==============================
-    var xPovertyHealthcareAxis = d3.axisBottom(xPovertyScale);
+    var xPovertyAxis = d3.axisBottom(xPovertyScale);
+    var xAgeAxis = d3.axisBottom(xAgeScale);
+    var xIncomeAxis = d3.axisBottom(xIncomeScale);
     var yHealthcareAxis = d3.axisLeft(yHealthcareScale);
+    var yObesityAxis = d3.axisLeft(yObesityScale);
+    var ySmokerAxis = d3.axisLeft(ySmokerScale);
 
     // Append Axes to the chart
     // ==============================
       chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
-      .call(xPovertyHealthcareAxis);
+      .call(xPovertyAxis);
 
     chartGroup.append("g")
       .call(yHealthcareAxis);
@@ -154,9 +174,35 @@ d3.csv("data/data.csv").then(function(acsData) {
       .text("Lacks Healthcare (%)");
 
     chartGroup.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 25)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "inactive")
+      .text("Smokes (%)");
+
+    chartGroup.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x", 0 - (height / 2))
+      .attr("dy", "1em")
+      .attr("class", "inactive")
+      .text("Obese (%)");
+
+    chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top - 60})`)
       .attr("class", "active")
       .text("In Poverty (%)");
+
+    chartGroup.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + margin.top - 35})`)
+      .attr("class", "inactive")
+      .text("Age (Median)");
+
+    chartGroup.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + margin.top - 10})`)
+      .attr("class", "inactive")
+      .text("Household Income (Median)");
 
   }).catch(function(error) {
     console.log(error);
