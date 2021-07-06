@@ -1,27 +1,61 @@
 function updatePage(selectedItem) {
+
+  // ==============================
+  // Define displayed data
+  // ==============================
+
+  // Initial loaded data
   if (selectedItem ==="default") {
     var xToolTip = 'poverty';
     var yToolTip = 'healthcare';
   }
+  // Retrieve current displayed data
   else {
     var activeData = [];
     d3.selectAll(".active").each(function (d) {
       activeData.push(d3.select(this).attr("id"));
     });
-    var xToolTip = activeData[0];
-    var yToolTip = activeData[1];
+    xToolTip = activeData[0];
+    yToolTip = activeData[1];
   };
-  console.log(xToolTip);
-  console.log(yToolTip);
+
+  // Update data of interest with user selection
+  switch(selectedItem) {
+    case "poverty":
+      xToolTip = 'poverty';
+      break;
+    case "age":
+      xToolTip = 'age';
+      break;
+    case "income":
+      xToolTip = 'income';
+      break;
+    case "healthcare":
+      yToolTip = 'healthcare';
+      break;
+    case "smokes":
+      yToolTip = 'smokes';
+      break;
+    case "obesity":
+      yToolTip = 'obesity';
+      break;
+  };
+  console.log("--------Selected Data----------");
+  console.log("X Axis: " + xToolTip);
+  console.log("Y Axis: " + yToolTip);
+
+
+  // ==============================
+  // Setup SVG Area
+  // ==============================
 
   // Remove prior SVG
   d3.select("svg").remove();
-  
-  // Define SVG Area with help from
+
+  // Define new SVG Area with help from
   // https://www.d3-graph-gallery.com/graph/custom_responsive.html
-  // ==============================
   var svgWidth = parseInt(d3.select("#scatter").style('width'),10);
-  console.log("svgWidth: " + svgWidth);
+  // console.log("svgWidth: " + svgWidth);
   var svgHeight = 0.75*parseInt(d3.select("#scatter").style('width'),10);
 
   var margin = {
@@ -32,12 +66,10 @@ function updatePage(selectedItem) {
   };
 
   // Define Chart Area
-  // ==============================
   var width = svgWidth - margin.left - margin.right;
   var height = svgHeight - margin.top - margin.bottom;
 
   // Create an SVG wrapper and group
-  // ==============================
   var svg = d3.select("#scatter")
     .classed("chart", true)
     .append("svg")
@@ -48,13 +80,14 @@ function updatePage(selectedItem) {
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
+  // ==============================
   // Import Data with headers:
   // id,state,abbr,poverty,povertyMoe,age,ageMoe,income,incomeMoe,healthcare,healthcareLow,
   // healthcareHigh,obesity,obesityLow,obesityHigh,smokes,smokesLow,smokesHigh
   // ==============================
   d3.csv("data/data.csv").then(function(acsData) {
-    // Cast data as numbers 
-    // ==============================
+
+    // Cast imported data as numbers 
     acsData.forEach(function(data) {
       data.id = +data.id;
 
@@ -68,46 +101,24 @@ function updatePage(selectedItem) {
       data.obesity = +data.obesity;
       data.smokes = +data.smokes;
 
-      // y Axis Data (Low Values)
-      data.healthcareLow = +data.healthcareLow;
-      data.obesityLow = +data.obesityLow;
-      data.smokesLow = +data.smokesLow;
+      // // y Axis Data (Low Values)
+      // data.healthcareLow = +data.healthcareLow;
+      // data.obesityLow = +data.obesityLow;
+      // data.smokesLow = +data.smokesLow;
 
-      // y Axis Data (High Values)
-      data.healthcareHigh = +data.healthcareHigh;
-      data.obesityHigh = +data.obesityHigh;
-      data.smokesHigh = +data.smokesHigh;
+      // // y Axis Data (High Values)
+      // data.healthcareHigh = +data.healthcareHigh;
+      // data.obesityHigh = +data.obesityHigh;
+      // data.smokesHigh = +data.smokesHigh;
 
-      // Margin of Error Data
-      data.povertyMoe = +data.povertyMoe;
-      data.ageMoe = +data.ageMoe;
-      data.incomeMoe = +data.incomeMoe;
+      // // Margin of Error Data
+      // data.povertyMoe = +data.povertyMoe;
+      // data.ageMoe = +data.ageMoe;
+      // data.incomeMoe = +data.incomeMoe;
     });
-
-    // Identify data of interest
-    // ==============================
-    switch(selectedItem) {
-      case "poverty":
-        xToolTip = 'poverty';
-        break;
-      case "age":
-        xToolTip = 'age';
-        break;
-      case "income":
-        xToolTip = 'income';
-        break;
-      case "healthcare":
-        yToolTip = 'healthcare';
-        break;
-      case "smokes":
-        yToolTip = 'smokes';
-        break;
-      case "obesity":
-        yToolTip = 'obesity';
-        break;
-    };
   
-    // Define selected data array
+    // ==============================
+    // Define selected data array to be plotted
     // ==============================
     var selectedData = [];
     acsData.forEach(function(data) {
@@ -116,18 +127,23 @@ function updatePage(selectedItem) {
           "state": data.state
       });
     });
-      
+    
+    // Add x-axis data
     acsData.forEach(function(data) {
       selectedData[selectedData.findIndex(obj => obj.abbr === data.abbr)].x = data[xToolTip];
     });
 
+    // Add y-axis data
     acsData.forEach(function(data) {
       selectedData[selectedData.findIndex(obj => obj.abbr === data.abbr)].y = data[yToolTip];
     });
 
 
+    // ==============================
     // Define axis label font classes
     // ==============================
+
+    // Initialize with default values
     var povertyLabel = 'inactive';
     var ageLabel = 'inactive';
     var incomeLabel = 'inactive';
@@ -163,6 +179,8 @@ function updatePage(selectedItem) {
         break;
     };
 
+
+    // ==============================
     // Build plot
     // ==============================
 
@@ -237,7 +255,6 @@ function updatePage(selectedItem) {
 
       
     // Add axes labels
-    // ==============================
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top - 60})`)
       .attr("class", povertyLabel)
@@ -288,7 +305,6 @@ function updatePage(selectedItem) {
       .attr("id", "obesity")
       .text("Obese (%)")
       .on("click", function () {updatePage("obesity")});
-
     
   }).catch(function(error) {
     console.log(error);
