@@ -211,10 +211,6 @@ function updatePage(selectedItem) {
       .enter()
       .append("circle")
       .attr("class","stateCircle")
-      // .attr("cx", d => xScale(d.x)-2)
-      // .attr("cy", d => yScale(d.y)+2)
-      // .transition()
-      // .duration(1000)
       .attr("cx", d => xScale(d.x))
       .attr("cy", d => yScale(d.y))
       .attr("r", "15");
@@ -241,7 +237,7 @@ function updatePage(selectedItem) {
 
     chartGroup.call(toolTip);
 
-    chartGroup
+    circlesGroup
       .on("mouseover", function(d) {
         toolTip.show(d, this);
       })
@@ -249,13 +245,13 @@ function updatePage(selectedItem) {
         toolTip.hide(d);
       });
 
-    // labelsGroup
-    //   .on("mouseover", function(d) {
-    //     toolTip.show(d, this);
-    //   })
-    //   .on("mouseout", function(d) {
-    //     toolTip.hide(d);
-    //   });
+    labelsGroup
+      .on("mouseover", function(d) {
+        toolTip.show(d, this);
+      })
+      .on("mouseout", function(d) {
+        toolTip.hide(d);
+      });
 
       
     // Add axes labels
