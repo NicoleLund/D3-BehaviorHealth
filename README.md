@@ -2,7 +2,7 @@
 UofA Data Analytics Bootcamp Homework Assignment 16-D3
 
 ### Assignment Description
-Build a responsive webpage that displays health risk data selected by the user when they click on the axis labels or hover over a datapoint.
+Build a responsive webpage that displays health risk data selected by the user when they click on the axis labels or hovers over a datapoint.
 
 ### Tools Utilized
 | Webpage | User Interface |
@@ -29,9 +29,9 @@ Build a responsive webpage that displays health risk data selected by the user w
     a. Navigate to <a href="http://localhost:8000/" target="_blank">http://localhost:8000/</a>
     b. Hover over the data bubbles to see detailed state data.
     c. Click on different axis labels to change the displayed data.
-
+    
 ### Completed Webpage
-![Load Webpage](images/webpage_load.png)
+
 
 ### Source Data and Starter Code
 * Provided by UofA Data Analytics Bootcamp
