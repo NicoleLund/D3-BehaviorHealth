@@ -23,11 +23,17 @@ Build a responsive webpage that displays health risk data selected by the user w
 
 ### Run Instructions
 1. Open terminal
+    
     a. Navigate to the D3_data_journalism folder
+    
     b. Run "python -m http.server" 
+
 2. Open browser
+
     a. Navigate to <a href="http://localhost:8000/" target="_blank">http://localhost:8000/</a>
+    
     b. Hover over the data bubbles to see detailed state data.
+    
     c. Click on different axis labels to change the displayed data.
 
 ### Completed Webpage
