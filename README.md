@@ -1,4 +1,4 @@
-# D3-challenge
+# D3-BehaviorHealth
 UofA Data Analytics Bootcamp Homework Assignment 16-D3
 
 ### Assignment Description
