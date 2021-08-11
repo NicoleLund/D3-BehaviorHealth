@@ -4,6 +4,9 @@ UofA Data Analytics Bootcamp Homework Assignment 16-D3
 ### Assignment Description
 Build a responsive webpage that displays health risk data selected by the user when they click on the axis labels or hover over a datapoint.
 
+### Deployed Webpage
+<a href="https://nicolelund.github.io/D3-BehaviorHealth/" target="_blank">https://nicolelund.github.io/D3-BehaviorHealth/</a>
+
 ### Tools Utilized
 | Webpage | User Interface |
 |----------|----------|
@@ -13,18 +16,17 @@ Build a responsive webpage that displays health risk data selected by the user w
 
 ### Project Content Descriptions
 * assignment_instructions: Instructions, data and starter code for completing the assignment.
-* D3_data_journalism: project code
-    * css: CSS style sheets for the webpage.
-    * data: CSV formatted data used by the webpage.
-    * scripts: Javascript code for building the interactive webpage.
-    * index.html: HTML code for the interactive webpage.
+* css: CSS style sheets for the webpage.
+* data: CSV formatted data used by the webpage.
+* scripts: Javascript code for building the interactive webpage.
+* index.html: HTML code for the interactive webpage.
 * images: Webpage screenshots.
 * LICENSE: MIT License Disclosure
 
 ### Run Instructions
 1. Open terminal
     
-    a. Navigate to the D3_data_journalism folder
+    a. Navigate to the project folder
     
     b. Run "python -m http.server" 
 
